@@ -169,6 +169,13 @@ namespace las_cs.src {
 					.Select(val => val.TrimStart())
 					.Where(f => (f[0] != '#')));
 		}
+	    	
+	    	// TODO: reimplement with Array.Copy
+    		public static T[][] chunk<T>(T[] arr, int size)
+      		{	
+        		int i = 0;
+        		return arr.GroupBy(s => i++ / size).Select(g => g.ToArray()).ToArray();
+	    	}
 
 
     }

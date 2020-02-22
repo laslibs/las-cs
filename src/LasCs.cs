@@ -126,7 +126,7 @@ namespace las_cs.src {
 			var sw = removeComment(sB);
 			var refined = sw.Split("\n").Select(m => Regex.Split(m, @"\s{2,}|\s*:").ToList()
 			.GetRange(0, 2))
-			.Where(f => f != null).ToList();
+			.Where(f => f != null);
 			var res = refined.Select(r => r[1]);
 			var wrap = res.ToList()[1].ToLower() == "yes" ? true : false;
 

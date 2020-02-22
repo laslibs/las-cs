@@ -155,10 +155,10 @@ namespace las_cs.src {
 			var uncommentSth = removeComment(sth).Trim();
 			if(uncommentSth.Length < 0)
 			{
-				//throw las error
+				//TODO: Throw Error instead of printing to the console
 				Console.WriteLine("There is no header in the file");
 			}
-			return uncommentSth.Split("\n").Select(m => m.Trim().Split(@"\s+|[.]")[0]).ToArray();
+			return uncommentSth.Split("\n").Select(m => Regex.Split(m.Trim(), @"\s+|[.]")[0]).ToArray();
 		}
 
 		public static string removeComment(string str)

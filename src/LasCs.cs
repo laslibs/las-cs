@@ -104,20 +104,14 @@ namespace las_cs.src {
 
 		public string other()
 		{
-			var s = this.blobString;
-			var som = Regex.Split((string)s, @"~O(?:\w*\s*)*\n\s*i")[1];
-			var str = " ";
-			if (som != null)
+			var som = Regex.Split(this.blobString, @"~O(?:\w*\s*)*\n\s*i");
+			if (som.Length > 1)
 			{
 				var some =
-					som.Split("~")[0].Replace(@"/\n\s*/g", " ").Trim();
-				str = removeComment(some);
+					som[1].Split("~")[0].Replace(@"/\n\s*/g", " ").Trim();
+				return removeComment(some);
 			}
-			if (str.Length <= 0)
-			{
-				return " ";
-			}
-			return str;
+			return "";
 		}
 
 		public (double, bool) metadata()

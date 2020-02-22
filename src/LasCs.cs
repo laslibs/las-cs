@@ -122,15 +122,13 @@ namespace las_cs.src {
 
 		public (double, bool) metadata()
 		{
-			var str = this.blobString;
-			var sB = (string)str.Trim().Split(@"~V(?:\w*\s*)*\n\s*")[1].Split("~")[0];
+			var sB = Regex.Split(this.blobString, @"~V(?:\w*\s*)*\n\s*")[1].Split("~")[0];
 			var sw = removeComment(sB);
-			var refined = sw.Split("\n").Select(m => m.Split(@"\s{2,}|\s*:").ToList()
+			var refined = sw.Split("\n").Select(m => Regex.Split(m, @"\s{2,}|\s*:").ToList()
 			.GetRange(0, 2))
-			.Where(f => f != null);
+			.Where(f => f != null).ToList();
 			var res = refined.Select(r => r[1]);
 			var wrap = res.ToList()[1].ToLower() == "yes" ? true : false;
-
 
 			object[] arr = new object[2] {double.Parse(res.ToList()[0]), wrap};
 
@@ -144,8 +142,12 @@ namespace las_cs.src {
 
 		public bool wrap()
 		{
-			var v = this.metadata();
-			return v.Item2;
+			retrun this.metadata().Item2;
+		}
+	    
+	    	public double version()
+		{
+			retrun this.metadata().Item1;
 		}
 
 		public string[] header()

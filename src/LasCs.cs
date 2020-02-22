@@ -75,62 +75,41 @@ namespace las_cs.src {
 		}
 
 
-		/**
-		* Returns a two-dimensional array of data in the log
-		* @returns {(Promise<Array<Array<string | number>>>)}
-		* @memberof Las
-		*/
-		public string[] data()
+		public string[][] data()
 		{
-			var s = this.blobString;
-			var hds = this.header();
-			var totalheadersLength = hds.Length;
-
-			var sB = Regex.Split((string)s, @"~A(?:\w*\s*)*\n")[1]
-				.Trim()
-				.Split(@"\s+")
-				.Select(m => convertToValue(m.Trim()));
-
-			if(sB.Count() < 0)
+			var sB = Regex.Split(this.blobString, @"~A(?:\w*\s*)*\n")[1]
+				      .Trim();
+      			var sBs = Regex.Split(sB, @"\s+")
+				        .Select(m => m.Trim()).ToArray();
+			if(sBs.Length < 0)
 			{
 				Console.WriteLine("No data/~A section in the file");
 			}
-
-
-			string[] arr = new string[2] { "g", "f" };
-			return arr;
-			
+      			return chunk<string>(sBs, this.header().Length);
 		}
+	    
 
 		public string other()
 		{
-			var s = this.blobString;
-			var som = Regex.Split((string)s, @"~O(?:\w*\s*)*\n\s*i")[1];
-			var str = " ";
-			if (som != null)
+			var som = Regex.Split(this.blobString, @"~O(?:\w*\s*)*\n\s*i");
+			if (som.Length > 1)
 			{
 				var some =
-					som.Split("~")[0].Replace(@"/\n\s*/g", " ").Trim();
-				str = removeComment(some);
+					som[1].Split("~")[0].Replace(@"/\n\s*/g", " ").Trim();
+				return removeComment(some);
 			}
-			if (str.Length <= 0)
-			{
-				return " ";
-			}
-			return str;
+			return "";
 		}
 
 		public (double, bool) metadata()
 		{
-			var str = this.blobString;
-			var sB = (string)str.Trim().Split(@"~V(?:\w*\s*)*\n\s*")[1].Split("~")[0];
+			var sB = Regex.Split(this.blobString, @"~V(?:\w*\s*)*\n\s*")[1].Split("~")[0];
 			var sw = removeComment(sB);
-			var refined = sw.Split("\n").Select(m => m.Split(@"\s{2,}|\s*:").ToList()
+			var refined = sw.Split("\n").Select(m => Regex.Split(m, @"\s{2,}|\s*:").ToList()
 			.GetRange(0, 2))
 			.Where(f => f != null);
 			var res = refined.Select(r => r[1]);
 			var wrap = res.ToList()[1].ToLower() == "yes" ? true : false;
-
 
 			object[] arr = new object[2] {double.Parse(res.ToList()[0]), wrap};
 
@@ -144,8 +123,12 @@ namespace las_cs.src {
 
 		public bool wrap()
 		{
-			var v = this.metadata();
-			return v.Item2;
+			retrun this.metadata().Item2;
+		}
+	    
+	    	public double version()
+		{
+			retrun this.metadata().Item1;
 		}
 
 		public string[] header()
@@ -155,10 +138,10 @@ namespace las_cs.src {
 			var uncommentSth = removeComment(sth).Trim();
 			if(uncommentSth.Length < 0)
 			{
-				//throw las error
+				//TODO: Throw Error instead of printing to the console
 				Console.WriteLine("There is no header in the file");
 			}
-			return uncommentSth.Split("\n").Select(m => m.Trim().Split(@"\s+|[.]")[0]).ToArray();
+			return uncommentSth.Split("\n").Select(m => Regex.Split(m.Trim(), @"\s+|[.]")[0]).ToArray();
 		}
 
 		public static string removeComment(string str)

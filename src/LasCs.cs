@@ -75,32 +75,19 @@ namespace las_cs.src {
 		}
 
 
-		/**
-		* Returns a two-dimensional array of data in the log
-		* @returns {(Promise<Array<Array<string | number>>>)}
-		* @memberof Las
-		*/
-		public string[] data()
+		public string[][] data()
 		{
-			var s = this.blobString;
-			var hds = this.header();
-			var totalheadersLength = hds.Length;
-
-			var sB = Regex.Split((string)s, @"~A(?:\w*\s*)*\n")[1]
-				.Trim()
-				.Split(@"\s+")
-				.Select(m => convertToValue(m.Trim()));
-
-			if(sB.Count() < 0)
+			var sB = Regex.Split(this.blobString, @"~A(?:\w*\s*)*\n")[1]
+				      .Trim();
+      			var sBs = Regex.Split(sB, @"\s+")
+				        .Select(m => m.Trim()).ToArray();
+			if(sBs.Length < 0)
 			{
 				Console.WriteLine("No data/~A section in the file");
 			}
-
-
-			string[] arr = new string[2] { "g", "f" };
-			return arr;
-			
+      			return chunk<string>(sBs, this.header().Length);
 		}
+	    
 
 		public string other()
 		{

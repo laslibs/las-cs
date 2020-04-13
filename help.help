@@ -1,0 +1,26 @@
+********* WELCOME TO LAS-Cs COMMAND LINE *********** 
+This CMD Line tool simply exposes the public methods required to use Las parser.
+_________________________________________________________________________________
+Usage: --command|-command [arguments]  
+example : --version      prints the version of LAS file
+          --tocsv  c:\users\mydesktop  exports las data to csv file to mydesktop
+
+COMMAND          ARGUMENT                         DESCRIPTION
+____________________________________________________________________________________
+help           none                 print this information
+reset          none                 reset the parser 
+version        none                 print version of las file
+wrap           none                 print wrap mode of las file
+columnstrp     column-name          print stripped [column-name] values 
+column         column-name          print [column-name] values 
+tocsv          directory            exports las data to csv file located at [directory]
+tocsvstrp      directory            exports stripped las data csv file located at [directory]
+rows           none                 print number of rows in las data 
+columns        none                 print number of columns/curve properties in las file
+data           none                 print las data
+datastrp       none                 prints las data stripped of null values
+other          none                 print other information in las file
+headerdesc     none                 print each header and description
+wellParams     none                 print all well parameters in las file
+curveparams    none                 print all curve parameters in las file
+logparams      none                 print all log parameters in las file

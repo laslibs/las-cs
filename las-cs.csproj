@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <RootNamespace>las_cs</RootNamespace>
+    <RootNamespace>las_cs_new_features</RootNamespace>
   </PropertyGroup>
 
 </Project>
